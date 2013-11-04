@@ -22,23 +22,25 @@ return false;
 ");
 ?>
 
-<div class="row span12">
-<span class="pull-left"><h1>Manage Badges</h1></span>
-<span class="pull-right">
-<?php $this->widget('bootstrap.widgets.TbButton', array(
-    'label'=>'New Badge',
-	'url' => Yii::app()->createUrl('/badges/create'),
-    'type'=>'primary', // null, 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-    'size'=>'large', // null, 'large', 'small' or 'mini'
-)); ?>
-<?php $this->widget('bootstrap.widgets.TbButton', array(
-    'label'=>'Approve Badges',
-	'url' => Yii::app()->createUrl('/badges/approve'),
-    'type'=>'primary', // null, 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-    'size'=>'large', // null, 'large', 'small' or 'mini'
-	'htmlOptions'=>array('style'=>'margin-left: 10px;'),
-)); ?>
-</span>
+<div class="row">
+	<span class="pull-left span6"><h1>Manage Badges</h1></span>
+	<span class="span6">
+		<span class="pull-right">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'label'=>'New Badge',
+			'url' => Yii::app()->createUrl('/badges/create'),
+			'type'=>'primary', // null, 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+			'size'=>'large', // null, 'large', 'small' or 'mini'
+		)); ?>
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'label'=>'Only Pending Badges',
+			'url' => Yii::app()->createUrl('/badges/approve'),
+			'type'=>'primary', // null, 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+			'size'=>'large', // null, 'large', 'small' or 'mini'
+			'htmlOptions'=>array('style'=>'margin-left: 10px;'),
+		)); ?>
+		</span>
+	</span>
 </div>
 
 <?php $this->widget('bootstrap.widgets.TbExtendedGridView',array(

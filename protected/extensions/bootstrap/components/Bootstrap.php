@@ -41,13 +41,13 @@ class Bootstrap extends CApplicationComponent
 	 * @var boolean whether to register the Bootstrap responsive CSS (bootstrap-responsive.min.css).
 	 * Defaults to false.
 	 */
-	public $responsiveCss = false;
+	public $responsiveCss = true;
 
 	/**
 	 * @var boolean whether to register the Font Awesome CSS (font-awesome.min.css).
 	 * Defaults to false.
 	 */
-	public $fontAwesomeCss = false;
+	public $fontAwesomeCss = true;
 
 	/**
 	 * @var bool Whether to use minified CSS files
@@ -496,6 +496,10 @@ class Bootstrap extends CApplicationComponent
 	{
 		$bootstrap = $this->makeBootstrapCssFilename();
 		$this->assetsRegistry->registerCssFile($bootstrap);
+		
+		$local_url = $this->getAssetsUrl();
+		$filename = "{$local_url}/bootstrap/css/bootstrap-responsive.min.css";
+		$this->assetsRegistry->registerCssFile($filename);
 	}
 
 	/**

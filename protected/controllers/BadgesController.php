@@ -13,9 +13,9 @@ public $layout='//layouts/column2';
 */
 public function filters()
 {
-return array(
-'accessControl', // perform access control for CRUD operations
-);
+	return array(
+		'accessControl', // perform access control for CRUD operations
+	);
 }
 
 /**
@@ -25,19 +25,19 @@ return array(
 */
 public function accessRules()
 {
-return array(
-array('allow', // allow authenticated user to perform 'create' and 'update' actions
-'actions'=>array('create'),
-'users'=>array('@'),
-),
-array('allow', // allow admin user to perform 'admin' and 'delete' actions
-'actions'=>array('admin','delete','update','view', 'approve'),
-'users'=>array('admin'),
-),
-array('deny',  // deny all users
-'users'=>array('*'),
-),
-);
+	return array(
+		array('allow', // allow authenticated user to perform 'create' and 'update' actions
+			'actions'=>array('create'),
+			'users'=>array('@'),
+		),
+		array('allow', // allow admin user to perform 'admin' and 'delete' actions
+			'actions'=>array('admin','delete','update','view', 'approve'),
+			'users'=>array('admin'),
+		),
+		array('deny',  // deny all users
+			'users'=>array('*'),
+		),
+	);
 }
 
 /**
@@ -46,9 +46,9 @@ array('deny',  // deny all users
 */
 public function actionView($id)
 {
-$this->render('view',array(
-'model'=>$this->loadModel($id),
-));
+	$this->render('view',array(
+		'model'=>$this->loadModel($id),
+	));
 }
 
 /**
@@ -57,22 +57,23 @@ $this->render('view',array(
 */
 public function actionCreate()
 {
-$model=new Badges;
+	$model=new Badges;
 
-// Uncomment the following line if AJAX validation is needed
-// $this->performAjaxValidation($model);
+	// Uncomment the following line if AJAX validation is needed
+	// $this->performAjaxValidation($model);
 
-if(isset($_POST['Badges']))
-{
-$model->attributes=$_POST['Badges'];
-Yii::app()->user->setFlash('success', "Request Submitted Successfully");
-if($model->save())
-$this->redirect(array('create'));
-}
+	if(isset($_POST['Badges']))
+	{
+		$model->attributes=$_POST['Badges'];
+		Yii::app()->user->setFlash('success', "Request Submitted Successfully");
+		if($model->save())
+			$this->sendActivationEmail($model->fullname, $model->id);
+		$this->redirect(array('create'));
+	}
 
-$this->render('create',array(
-'model'=>$model,
-));
+	$this->render('create',array(
+		'model'=>$model,
+	));
 }
 
 /**
@@ -82,21 +83,21 @@ $this->render('create',array(
 */
 public function actionUpdate($id)
 {
-$model=$this->loadModel($id);
+	$model=$this->loadModel($id);
 
-// Uncomment the following line if AJAX validation is needed
-// $this->performAjaxValidation($model);
+	// Uncomment the following line if AJAX validation is needed
+	// $this->performAjaxValidation($model);
 
-if(isset($_POST['Badges']))
-{
-$model->attributes=$_POST['Badges'];
-if($model->save())
-$this->redirect(array('update','id'=>$model->whmcs_user_id));
-}
+	if(isset($_POST['Badges']))
+	{
+		$model->attributes=$_POST['Badges'];
+		if($model->save())
+		$this->redirect(array('update','id'=>$model->id));
+	}
 
-$this->render('update',array(
-'model'=>$model,
-));
+	$this->render('update',array(
+		'model'=>$model,
+	));
 }
 
 /**
@@ -124,10 +125,10 @@ throw new CHttpException(400,'Invalid request. Please do not repeat this request
 */
 public function actionIndex()
 {
-$dataProvider=new CActiveDataProvider('Badges');
-$this->render('index',array(
-'dataProvider'=>$dataProvider,
-));
+	$dataProvider=new CActiveDataProvider('Badges');
+	$this->render('index',array(
+		'dataProvider'=>$dataProvider,
+	));
 }
 
 /**
@@ -135,14 +136,14 @@ $this->render('index',array(
 */
 public function actionAdmin()
 {
-$model=new Badges('search');
-$model->unsetAttributes();  // clear any default values
-if(isset($_GET['Badges']))
-$model->attributes=$_GET['Badges'];
+	$model=new Badges('search');
+	$model->unsetAttributes();  // clear any default values
+	if(isset($_GET['Badges']))
+		$model->attributes=$_GET['Badges'];
 
-$this->render('admin',array(
-'model'=>$model,
-));
+	$this->render('admin',array(
+		'model'=>$model,
+	));
 }
 
 public function actionApprove()
@@ -168,10 +169,10 @@ public function actionApprove()
 */
 public function loadModel($id)
 {
-$model=Badges::model()->findByPk($id);
-if($model===null)
-throw new CHttpException(404,'The requested page does not exist.');
-return $model;
+	$model=Badges::model()->findByPk($id);
+	if($model===null)
+		throw new CHttpException(404,'The requested page does not exist.');
+	return $model;
 }
 
 /**
@@ -180,10 +181,10 @@ return $model;
 */
 protected function performAjaxValidation($model)
 {
-if(isset($_POST['ajax']) && $_POST['ajax']==='badges-form')
-{
-echo CActiveForm::validate($model);
-Yii::app()->end();
-}
+	if(isset($_POST['ajax']) && $_POST['ajax']==='badges-form')
+	{
+		echo CActiveForm::validate($model);
+		Yii::app()->end();
+	}
 }
 }

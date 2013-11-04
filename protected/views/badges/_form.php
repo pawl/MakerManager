@@ -65,10 +65,10 @@
 	<?php  
 	if (!$model->isNewRecord) {
 		echo "<div class='formField'>";
-		echo CHtml::label('<strong>Status</strong>', 'status', array('style' => 'display: inline;'));
+		echo CHtml::label('<strong>New Status</strong>', 'status', array('style' => 'display: inline;'));
 		echo "<span class='required' style='display: inline-block;'>*</span><br>";
 		echo "<small>Note: Setting the user to active/deactivated will activate/deactivate the user in the access control system.</small><br>";
-		echo $form->dropDownList($model, 'status', array('Active' => 'Active', 'Deactivated' => 'Deactivated', 'Pending' => 'Pending'), array('class'=>'span2','maxlength'=>16));
+		echo $form->dropDownList($model, 'status', array('Active' => 'Active', 'Deactivated' => 'Deactivated'), array('class'=>'span2','maxlength'=>16));
 		echo "</div>";
 	}
 	?>

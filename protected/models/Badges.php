@@ -4,6 +4,7 @@
  * This is the model class for table "tbl_badges".
  *
  * The followings are the available columns in table 'tbl_badges':
+ * @property integer $id
  * @property integer $whmcs_user_id
  * @property integer $badge
  * @property string $status
@@ -34,7 +35,7 @@ class Badges extends CActiveRecord
 			array('email, fullname', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('whmcs_user_id, badge, status, email, fullname', 'safe', 'on'=>'search'),
+			array('id, whmcs_user_id, badge, status, email, fullname', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,35 +57,7 @@ class Badges extends CActiveRecord
 			$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id);
 			$this->fullname = $userResult->firstname . " " . $userResult->lastname;
 			$this->email = $userResult->email;
-			
-			// multiple recipients
-			$to  = 'admin@dallasmakerspace.org';
 
-			// subject
-			$subject = 'Badge Pending Activation';
-
-			// message
-			$message = '
-			<html>
-			<head>
-			  <title>Badge Pending Activation</title>
-			</head>
-			<body>
-			  <p>' . $this->fullname . '\'s badge is pending activation. Follow the link below to activate it.</p>
-			  <a href="https://dallasmakerspace.org/admin/crm/index.php?r=badges/approve">Approve</a>
-			</body>
-			</html>
-			';
-
-			// To send HTML mail, the Content-type header must be set
-			$headers  = 'MIME-Version: 1.0' . "\r\n";
-			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-
-			// Additional headers
-			$headers .= 'From: Maker Manager <makermanager@dallasmakerspace.prg>' . "\r\n";
-
-			// Mail it
-			mail($to, $subject, $message, $headers);
 		} else {
 			Yii::import('ext.EHttpClient.*');
 			if ($this->status == "Active") {
@@ -124,6 +97,7 @@ class Badges extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'id' => 'ID',
 			'whmcs_user_id' => 'User ID',
 			'badge' => 'Badge Number',
 			'status' => 'Status',
@@ -150,6 +124,10 @@ class Badges extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		// added to make pending badges show first
+		$criteria->order = 'status DESC';
+		
+		$criteria->compare('id',$this->id);
 		$criteria->compare('whmcs_user_id',$this->whmcs_user_id);
 		$criteria->compare('badge',$this->badge);
 		$criteria->compare('status',$this->status,true);
