@@ -46,7 +46,7 @@ class UserIdentity extends CUserIdentity
 			 
 			if($connection)
 			{
-				$bind = ldap_bind($connection, "uid={$this->username},ou={$options['ou']},{$dc_string}", $this->password);
+				$bind = @ldap_bind($connection, "uid={$this->username},ou={$options['ou']},{$dc_string}", $this->password);
 			}
 				
 			if($bind) {
