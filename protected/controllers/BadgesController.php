@@ -26,11 +26,11 @@ public function filters()
 public function accessRules()
 {
 	return array(
-		array('allow', // allow authenticated user to perform 'create' and 'update' actions
+		array('allow', // allow authenticated user to perform
 			'actions'=>array('create'),
 			'users'=>array('@'),
 		),
-		array('allow', // allow admin user to perform 'admin' and 'delete' actions
+		array('allow', // allow admin user to perform
 			'actions'=>array('admin','delete','update','view', 'approve'),
 			'users'=>array('admin'),
 		),
@@ -70,6 +70,8 @@ public function actionCreate()
 			$this->sendActivationEmail($model->fullname, $model->id);
 		$this->redirect(array('create'));
 	}
+	
+
 
 	$this->render('create',array(
 		'model'=>$model,
@@ -140,7 +142,7 @@ public function actionAdmin()
 	$model->unsetAttributes();  // clear any default values
 	if(isset($_GET['Badges']))
 		$model->attributes=$_GET['Badges'];
-
+		
 	$this->render('admin',array(
 		'model'=>$model,
 	));

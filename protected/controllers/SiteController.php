@@ -31,7 +31,18 @@ class SiteController extends Controller
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('index');
 	}
-
+	
+	
+	
+	// send the user to WHMCS
+	public function actionBilling()
+	{
+		if (!Yii::app()->user->isGuest) {
+			$this->redirect($this->whmcsUrl());
+		} else {
+			Yii::app()->user->loginRequired();
+		}
+	}
 	/**
 	 * This is the action to handle external exceptions.
 	 */
