@@ -62,8 +62,9 @@ class UserIdentity extends CUserIdentity
 				$result = ldap_search( $connection, $dc_string, 'cn=admins', array('memberUid') );
 				$entries = ldap_get_entries($connection, $result);
 
+				$adminArray = array_map('strtolower', $entries[0]['memberuid']);
 				// set user in administrators group as admin
-				if (in_array($this->username,$entries[0]['memberuid'])) {
+				if (in_array(strtolower($this->username),$adminArray)) {
 					$this->username = 'admin';
 				}
 			}
