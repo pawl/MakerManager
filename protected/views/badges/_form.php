@@ -16,32 +16,12 @@
 	<br>
 	<div class='formField'>
 		<?php 
-		// get list of user ids with active badges
-		$activeBadges = Yii::app()->db->createCommand()
-		->select('whmcs_user_id')
-		->from('tbl_badges')
-		->where('status=:status', array(':status'=>"Active"))
-		->queryColumn();	
-		
-		$criteria = new CDbCriteria;
-		
-		// only paid members show in dropdown
-		$criteria->addCondition("status='Active'");
-		
-		// no users with active badges are in the email dropdown
-		if ($activeBadges) {
-			$activeBadges = implode(",", $activeBadges);
-			$criteria->addCondition('id not in (' . $activeBadges . ')');
-		}
-		$criteria->order = 'email ASC';
-		
 		if ($model->isNewRecord) {
 			echo CHtml::label('<strong>User E-mail</strong>', 'whmcs_user_id', array('style' => 'display: inline;'));
 			echo '<span class="required" style="display: inline-block;">*</span>';
 			echo '<br><small>Note: Only showing paid members without an active badge.</small><br>';
-			echo $form->dropDownList($model,'whmcs_user_id', 
-				CHtml::listData(WHMCSclients::model()->findAll($criteria), 'id', 'email'), array('empty'=>'Select User by Email')
-			); 
+			// whmcsUserListData function will grab the list of whmcs_user_ids + emails 
+			echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData(), array('empty'=>'Select User by Email')); 
 		} else {
 			echo '<strong>User E-mail:</strong><br>';
 			echo '<h4 style="font-weight: 100;">' . $model->email . '</h4>';
