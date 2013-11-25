@@ -31,7 +31,7 @@ public function accessRules()
 			'users'=>array('@'),
 		),
 		array('allow', // allow admin user to perform
-			'actions'=>array('admin','delete','update','view', 'approve'),
+			'actions'=>array('admin', 'delete', 'view', 'approve', 'editable'),
 			'users'=>array('admin'),
 		),
 		array('deny',  // deny all users
@@ -78,28 +78,11 @@ public function actionCreate()
 	));
 }
 
-/**
-* Updates a particular model.
-* If update is successful, the browser will be redirected to the 'view' page.
-* @param integer $id the ID of the model to be updated
-*/
-public function actionUpdate($id)
+// used by the editable column to save data
+public function actionEditable()
 {
-	$model=$this->loadModel($id);
-
-	// Uncomment the following line if AJAX validation is needed
-	// $this->performAjaxValidation($model);
-
-	if(isset($_POST['Badges']))
-	{
-		$model->attributes=$_POST['Badges'];
-		if($model->save())
-		$this->redirect(array('update','id'=>$model->id));
-	}
-
-	$this->render('update',array(
-		'model'=>$model,
-	));
+    $es = new EditableSaver('Badges');
+    $es->update();
 }
 
 /**
@@ -107,20 +90,25 @@ public function actionUpdate($id)
 * If deletion is successful, the browser will be redirected to the 'admin' page.
 * @param integer $id the ID of the model to be deleted
 */
-/* public function actionDelete($id)
+public function actionDelete($id)
 {
-if(Yii::app()->request->isPostRequest)
-{
-// we only allow deletion via POST request
-$this->loadModel($id)->delete();
-
-// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-if(!isset($_GET['ajax']))
-$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+	if(Yii::app()->request->isPostRequest)
+	{
+		// we only allow deletion via POST request
+		$model = $this->loadModel($id);
+		if ($model->status == "Pending") {
+			$model->delete();
+		} else {
+			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+		}
+		
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!isset($_GET['ajax']))
+		$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+	}
+	else
+	throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 }
-else
-throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-} */
 
 /**
 * Lists all models.
@@ -145,22 +133,6 @@ public function actionAdmin()
 		
 	$this->render('admin',array(
 		'model'=>$model,
-	));
-}
-
-public function actionApprove()
-{
-	$dataProvider = new CActiveDataProvider ('Badges', array ( 
-		'criteria' => array ( 
-			'condition' => 'status = "Pending"' 
-		), 
-		'pagination' => array ( 
-			'PageSize' => 20, 
-		) 	
-	));
-
-	$this->render('approve',array(
-		'dataProvider'=>$dataProvider,
 	));
 }
 

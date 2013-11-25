@@ -62,6 +62,14 @@ class TrainingMembers extends CActiveRecord
 		);
 	}
 
+	// new requests get saved as pending
+	public function beforeSave(){
+		if ($this->isNewRecord) {
+			$this->status = "Pending";
+		}
+		return parent::beforeSave();
+	}	
+	
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *

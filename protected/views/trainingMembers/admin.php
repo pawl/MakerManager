@@ -47,7 +47,17 @@ return false;
 		'whmcs_user_id',
 		'tool_id',
 		'trainer_id',
-		'status',
+		array( 
+              'class' => 'editable.EditableColumn',
+              'name' => 'status',
+              'headerHtmlOptions' => array('style' => 'width: 100px'),
+              'editable' => array(
+                  'type'     => 'select',
+                  'url'      => $this->createUrl('editable'),
+                  'source'   => Editable::source(array('Trained' => 'Trained')),
+				  'emptytext' => 'Pending',
+              )
+        ),
 array(
 'class'=>'bootstrap.widgets.TbButtonColumn',
 ),

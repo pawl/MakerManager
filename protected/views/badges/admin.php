@@ -32,13 +32,6 @@ return false;
 			'type'=>'primary', // null, 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
 			'size'=>'large', // null, 'large', 'small' or 'mini'
 		)); ?>
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'label'=>'Only Pending Badges',
-			'url' => Yii::app()->createUrl('/badges/approve'),
-			'type'=>'primary', // null, 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-			'size'=>'large', // null, 'large', 'small' or 'mini'
-			'htmlOptions'=>array('style'=>'margin-left: 10px;'),
-		)); ?>
 		</span>
 	</span>
 </div>
@@ -52,10 +45,25 @@ return false;
 		'fullname',
 		'email',
 		'badge',
-		'status',
+		array( 
+              'class' => 'editable.EditableColumn',
+              'name' => 'status',
+              'headerHtmlOptions' => array('style' => 'width: 100px'),
+              'editable' => array(
+                  'type'     => 'select',
+                  'url'      => $this->createUrl('editable'),
+                  'source'   => Editable::source(array('Active' => 'Active', 'Deactivated' => 'Deactivated')),
+				  'emptytext' => 'Pending',
+              )
+        ),
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
-			'template'=>'{update}',
+			'template'=>'{delete}',
+			'buttons'=>array(
+				'delete'=>array(
+					'visible'=>'$data->status=="Pending"',
+				),
+			)
 		),
 ),
 )); ?>

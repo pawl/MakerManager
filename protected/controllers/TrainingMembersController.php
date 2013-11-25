@@ -35,6 +35,7 @@ class TrainingMembersController extends Controller
                     'view',
                     'admin',
                     'delete',
+					'editable',
                 ),
                 'users' => array(
                     '@'
@@ -110,6 +111,13 @@ class TrainingMembersController extends Controller
             'model' => $model
         ));
     }
+	
+	// used by the editable column to save data
+	public function actionEditable()
+	{
+		$es = new EditableSaver('TrainingMembers');
+		$es->update();
+	}
     
     /**
      * Deletes a particular model.

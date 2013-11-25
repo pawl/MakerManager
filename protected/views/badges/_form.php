@@ -16,65 +16,42 @@
 	<br>
 	<div class='formField'>
 		<?php 
-		if ($model->isNewRecord) {
-			echo CHtml::label('<strong>User E-mail</strong>', 'whmcs_user_id', array('style' => 'display: inline;'));
-			echo '<span class="required" style="display: inline-block;">*</span>';
-			echo '<br><small>Note: Only showing paid members without an active badge.</small><br>';
-			// whmcsUserListData function will grab the list of whmcs_user_ids + emails 
-			echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData(), array('empty'=>'Select User by Email')); 
-		} else {
-			echo '<strong>User E-mail:</strong><br>';
-			echo '<h4 style="font-weight: 100;">' . $model->email . '</h4>';
-		}
+		echo CHtml::label('<strong>User E-mail</strong>', 'whmcs_user_id', array('style' => 'display: inline;'));
+		echo '<span class="required" style="display: inline-block;">*</span>';
+		echo '<br><small>Note: Only showing paid members without an active badge.</small><br>';
+		// whmcsUserListData function will grab the list of whmcs_user_ids + emails 
+		echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData(), array('empty'=>'Select User by Email')); 
 		?>
 	</div>
 	
 	<div class='formField'>
 		<?php 
-		if ($model->isNewRecord) {
-			echo CHtml::label('<strong>Badge Number</strong>', 'badge', array('style' => 'display: inline;'));
-			echo '<span class="required" style="display: inline-block;">*</span>';
-			echo '<br><small>Note: If it\'s a card, it\'s only the first number on the left. (usually starts with a zero)</small><br>';
-			echo $form->textFieldRow($model,'badge',array('class'=>'span2', 'labelOptions' => array('label' => false))); 
-		} else {
-			echo '<strong>Badge Number:</strong><br>';
-			echo '<h4 style="font-weight: 100;">' . $model->badge . '</h4>';
-		}
+		echo CHtml::label('<strong>Badge Number</strong>', 'badge', array('style' => 'display: inline;'));
+		echo '<span class="required" style="display: inline-block;">*</span>';
+		echo '<br><small>Note: If it\'s a card, it\'s only the first number on the left. (usually starts with a zero)</small><br>';
+		echo $form->textFieldRow($model,'badge',array('class'=>'span2', 'labelOptions' => array('label' => false))); 
 		?>
 	</div>
-	<?php  
-	if (!$model->isNewRecord) {
-		echo "<div class='formField'>";
-		echo CHtml::label('<strong>New Status</strong>', 'status', array('style' => 'display: inline;'));
-		echo "<span class='required' style='display: inline-block;'>*</span><br>";
-		echo "<small>Note: Setting the user to active/deactivated will activate/deactivate the user in the access control system.</small><br>";
-		echo $form->dropDownList($model, 'status', array('Active' => 'Active', 'Deactivated' => 'Deactivated'), array('class'=>'span2','maxlength'=>16));
-		echo "</div>";
-	}
-	?>
-	
 	
 	<?php 
-	if ($model->isNewRecord) {
-		echo "<div class='formField'>";
-		echo CHtml::label('<strong>Has the user signed a <a href="https://dallasmakerspace.org/wiki/File:Access_Acknowledgement_and_Liability_Release.pdf">liability waiver</a>?</strong>', 'liabilityWaiver', array('style' => 'display: inline;'));
-		echo "<span class='required' style='display: inline-block;'>*</span>
-		<br>
-		<small>Note: You can scan it and place it on top of the file cabinet in the security room.</small>
-		<br>";
-		$this->widget(
-		'bootstrap.widgets.TbButtonGroup',
-		array(
-			'toggle' => 'radio',
-			'id' => 'liabilityWaiver',
-			'buttons' => array(
-				array('label' => 'Yes'),
-				array('label' => 'No'),
-			),
-		)
-		);
-		echo "</div>";
-	}
+	echo "<div class='formField'>";
+	echo CHtml::label('<strong>Has the user signed a <a href="https://dallasmakerspace.org/wiki/File:Access_Acknowledgement_and_Liability_Release.pdf">liability waiver</a>?</strong>', 'liabilityWaiver', array('style' => 'display: inline;'));
+	echo "<span class='required' style='display: inline-block;'>*</span>
+	<br>
+	<small>Note: You can scan it and place it on top of the file cabinet in the security room.</small>
+	<br>";
+	$this->widget(
+	'bootstrap.widgets.TbButtonGroup',
+	array(
+		'toggle' => 'radio',
+		'id' => 'liabilityWaiver',
+		'buttons' => array(
+			array('label' => 'Yes'),
+			array('label' => 'No'),
+		),
+	)
+	);
+	echo "</div>";
 	?>
 	
 	
