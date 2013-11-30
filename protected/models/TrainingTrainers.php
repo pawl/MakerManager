@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'tbl_training_trainers':
  * @property integer $id
  * @property integer $whmcs_user_id
- * @property string $trainer_name
  * @property integer $tool_id
  * @property string $status
  */
@@ -29,11 +28,10 @@ class TrainingTrainers extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('whmcs_user_id, tool_id', 'numerical', 'integerOnly'=>true),
-			array('trainer_name', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, whmcs_user_id, trainer_name, tool_id, status', 'safe', 'on'=>'search'),
+			array('id, whmcs_user_id, tool_id, status', 'safe', 'on'=>'search'),
 		);
 	}
 	
@@ -46,6 +44,8 @@ class TrainingTrainers extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'whmcs'=>array(self::BELONGS_TO, 'WHMCSclients', 'whmcs_user_id'),
+			'tools'=>array(self::BELONGS_TO, 'TrainingTools', 'tool_id'),
 		);
 	}
 
@@ -57,7 +57,6 @@ class TrainingTrainers extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'whmcs_user_id' => 'Whmcs User',
-			'trainer_name' => 'Trainer Name',
 			'tool_id' => 'Tool',
 			'status' => 'Status',
 		);
@@ -91,7 +90,6 @@ class TrainingTrainers extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('whmcs_user_id',$this->whmcs_user_id);
-		$criteria->compare('trainer_name',$this->trainer_name,true);
 		$criteria->compare('tool_id',$this->tool_id);
 		$criteria->compare('status',$this->status,true);
 

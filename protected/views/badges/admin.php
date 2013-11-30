@@ -42,8 +42,12 @@ return false;
 'dataProvider'=>$model->search(),
 'filter'=>$model,
 'columns'=>array(
-		'fullname',
-		'email',
+		array(
+			'type'=>'raw',
+			'header'=>'Name',
+			'value'=>'$data->whmcs->firstname . " " . $data->whmcs->lastname',
+		),
+		'whmcs.email',
 		'badge',
 		array( 
               'class' => 'editable.EditableColumn',

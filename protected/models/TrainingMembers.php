@@ -45,6 +45,9 @@ class TrainingMembers extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'whmcs'=>array(self::BELONGS_TO, 'WHMCSclients', 'whmcs_user_id'),
+			'trainers'=>array(self::BELONGS_TO, 'TrainingTrainers', 'trainer_id'),
+			'tools'=>array(self::BELONGS_TO, 'TrainingTools', 'tool_id'),
 		);
 	}
 	

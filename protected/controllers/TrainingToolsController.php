@@ -34,7 +34,6 @@ class TrainingToolsController extends Controller
                     'index',
                     'view',
                     'admin',
-                    'delete',
                 ),
                 'users' => array(
                     '@'
@@ -111,12 +110,14 @@ class TrainingToolsController extends Controller
         ));
     }
     
+	
+	// delete will break relations
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
      */
-    public function actionDelete($id)
+    /* public function actionDelete($id)
     {
         if (Yii::app()->request->isPostRequest) {
             // we only allow deletion via POST request
@@ -129,7 +130,7 @@ class TrainingToolsController extends Controller
                 ));
         } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
-    }
+    } */
     
     /**
      * Lists all models.

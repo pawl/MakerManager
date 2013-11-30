@@ -43,10 +43,17 @@ return false;
 'dataProvider'=>$model->search(),
 'filter'=>$model,
 'columns'=>array(
-		'id',
-		'whmcs_user_id',
-		'trainer_name',
-		'tool_id',
+		array(
+			'type'=>'raw',
+			'header'=>'Trainer Name',
+			'value'=>'$data->whmcs->firstname . " " . $data->whmcs->lastname',
+		),
+		array(
+			'type'=>'raw',
+			'header'=>'Trainer Email',
+			'value'=>'$data->whmcs->email',
+		),
+		'tools.tool_name',
 		array( 
               'class' => 'editable.EditableColumn',
               'name' => 'status',
@@ -60,6 +67,7 @@ return false;
         ),
 array(
 'class'=>'bootstrap.widgets.TbButtonColumn',
+'template'=>'{delete}',
 ),
 ),
 )); ?>

@@ -49,6 +49,7 @@ return false;
 		'timeout',
 array(
 'class'=>'bootstrap.widgets.TbButtonColumn',
+'template'=>'{update}',
 ),
 ),
 )); ?>

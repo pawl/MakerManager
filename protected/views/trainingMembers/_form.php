@@ -26,7 +26,7 @@
 		<?php 
 			echo CHtml::label('Trainer', 'TrainingMembers_trainer_id', array('style' => 'display: inline;'));
 			echo '<span class="required" style="display: inline-block;">*</span><br>';
-			echo $form->dropDownList($model,'trainer_id', CHtml::listData(TrainingTrainers::model()->findAll(), 'id', 'trainer_name'), array('empty'=>'Select Trainer')); 
+			echo $form->dropDownList($model,'trainer_id', CHtml::listData(TrainingTrainers::model()->findAll(), 'whmcs_user_id', 'whmcs.email'), array('empty'=>'Select Trainer By Email')); 
 		?>
 	</div>
 	

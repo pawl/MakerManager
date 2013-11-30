@@ -76,8 +76,7 @@ class TrainingTrainersController extends Controller
             $model->attributes = $_POST['TrainingTrainers'];
             if ($model->save())
                 $this->redirect(array(
-                    'view',
-                    'id' => $model->id
+                    'admin',
                 ));
         }
         
@@ -102,8 +101,7 @@ class TrainingTrainersController extends Controller
             $model->attributes = $_POST['TrainingTrainers'];
             if ($model->save())
                 $this->redirect(array(
-                    'view',
-                    'id' => $model->id
+                    'admin',
                 ));
         }
         

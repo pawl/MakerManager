@@ -8,8 +8,6 @@
  * @property integer $whmcs_user_id
  * @property integer $badge
  * @property string $status
- * @property string $email
- * @property string $fullname
  */
 class Badges extends CActiveRecord
 {
@@ -32,10 +30,9 @@ class Badges extends CActiveRecord
 			array('badge', 'required'),
 			array('whmcs_user_id, badge', 'numerical', 'integerOnly'=>true),
 			array('status', 'length', 'max'=>16),
-			array('email, fullname', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, whmcs_user_id, badge, status, email, fullname', 'safe', 'on'=>'search'),
+			array('id, whmcs_user_id, whmcsEmail, badge, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,7 +44,22 @@ class Badges extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'whmcs'=>array(self::BELONGS_TO, 'WHMCSclients', 'whmcs_user_id'),
 		);
+	}
+	
+	private $_whmcsEmail = null;
+	public function getWhmcsEmail()
+	{
+		if ($this->_whmcsEmail === null && $this->whmcs !== null)
+		{
+			$this->_whmcsEmail = $this->whmcs->email;
+		}
+		return $this->_whmcsEmail;
+	}
+	public function setWhmcsEmail($value)
+	{
+		$this->_whmcsEmail = $value;
 	}
 	
 	public function beforeSave(){
@@ -55,9 +67,6 @@ class Badges extends CActiveRecord
 			$this->status = "Pending";
 			
 			$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id);
-			$this->fullname = $userResult->firstname . " " . $userResult->lastname;
-			$this->email = $userResult->email;
-
 		} else {
 			Yii::import('ext.EHttpClient.*');
 			if ($this->status == "Active") {
@@ -101,8 +110,6 @@ class Badges extends CActiveRecord
 			'whmcs_user_id' => 'User ID',
 			'badge' => 'Badge Number',
 			'status' => 'Status',
-			'email' => 'Email',
-			'fullname' => 'Full Name',
 		);
 	}
 
@@ -131,8 +138,6 @@ class Badges extends CActiveRecord
 		$criteria->compare('whmcs_user_id',$this->whmcs_user_id);
 		$criteria->compare('badge',$this->badge);
 		$criteria->compare('status',$this->status,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('fullname',$this->fullname,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

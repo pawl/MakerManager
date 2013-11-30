@@ -13,9 +13,6 @@
 	echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData($onlyUsersWithBadge = true), array('empty'=>'Select Trainer by Email')); 
 	?>
 	
-
-	<?php echo $form->textFieldRow($model,'trainer_name',array('class'=>'span5','maxlength'=>255)); ?>
-
 	<div>
 		<?php 
 		echo CHtml::label('Tool', 'TrainingTrainers_tool_id', array('style' => 'display: inline;'));
@@ -23,12 +20,6 @@
 		echo $form->dropDownList($model,'tool_id', CHtml::listData(TrainingTools::model()->findAll(), 'id', 'tool_name'), array('empty'=>'Select Tool')); 
 		?>
 	</div>
-
-	<?php 
-	if ($model->isNewRecord) {
-		echo $form->textFieldRow($model,'status',array('class'=>'span5','maxlength'=>60)); 
-	}
-	?>
 
 <div class="form-actions">
 	<?php 

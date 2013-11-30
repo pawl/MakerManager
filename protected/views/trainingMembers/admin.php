@@ -44,9 +44,17 @@ return false;
 'filter'=>$model,
 'columns'=>array(
 		//'id',
-		'whmcs_user_id',
-		'tool_id',
-		'trainer_id',
+		array(
+			'type'=>'raw',
+			'header'=>'Name',
+			'value'=>'$data->whmcs->firstname . " " . $data->whmcs->lastname',
+		),
+		'tools.tool_name',
+		array(
+			'type'=>'raw',
+			'header'=>'Trainer Name',
+			'value'=>'$data->trainers->whmcs->firstname . " " . $data->trainers->whmcs->lastname',
+		),
 		array( 
               'class' => 'editable.EditableColumn',
               'name' => 'status',
@@ -58,8 +66,9 @@ return false;
 				  'emptytext' => 'Pending',
               )
         ),
-array(
-'class'=>'bootstrap.widgets.TbButtonColumn',
-),
-),
+		array(
+			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'template'=>'{delete}',
+		),
+	),
 )); ?>
