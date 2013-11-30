@@ -90,6 +90,7 @@ class TrainingMembers extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = 'status DESC';
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('whmcs_user_id',$this->whmcs_user_id);
