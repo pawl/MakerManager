@@ -65,27 +65,29 @@ class Badges extends CActiveRecord
 	public function beforeSave(){
 		if ($this->isNewRecord) {
 			$this->status = "Pending";
-			
-			$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id);
+			//$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id);
 		} else {
 			Yii::import('application.components.Controller'); // get activateOrDeactivateBadge function from Controller.php
 			$response =  Controller::activateOrDeactivateBadge($this->status, $this->badge);
 			
-			if($response->isSuccessful())
-				Yii::app()->user->setFlash('success', $response->getBody());				 
-			else
+			if($response->isSuccessful()) {
+				Yii::app()->user->setFlash('success', $response->getBody());	
+				$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id); // for getting first and last name
+				if ("User Added Successfully" == $response->getRawBody()) {
+					Controller::sendActivatedEmail($userResult->firstname . ' ' . $userResult->lastname);
+				}
+				// could also add e-mail for deactivation
+			}
+			else {
 				Yii::app()->user->setFlash('error', $response->getRawBody());
-				
-			if("User Added Successfully" != $response->getRawBody()) {
-				$this->status = "Pending";
-				Yii::app()->user->setFlash('error', "Adding User Failed");
 			}
-			elseif("User Removed Successfully" != $response->getRawBody()) {
+			
+			// check if there was an unexpected message
+			// TODO: Check if this is effective
+			if(("User Added Successfully" != $response->getRawBody()) AND ("User Removed Successfully" != $response->getRawBody())) {
 				$this->status = "Pending";
-				Yii::app()->user->setFlash('error', "Removing User Failed");
+				Yii::app()->user->setFlash('error', "Adding Or Removing User Failed");
 			}
-							 
-					
 		}
 		return parent::beforeSave();
 	}
