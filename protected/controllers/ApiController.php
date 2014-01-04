@@ -7,6 +7,32 @@ class ApiController extends Controller
 		$this->render('index');
 	}
 
+	public function actionBadgeActivateOrDeactivate($status, $badge, $apiKey)
+	{
+		if (in_array($status, array("Active", "Deactivated"))) {
+			$response = activateOrDeactivateBadge($status, $badge);
+			
+			if($response->isSuccessful()) {
+				$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id); // for getting first and last name
+				if ("User Added Successfully" == $response->getRawBody()) {
+					//Controller::sendActivatedEmail($userResult->firstname . ' ' . $userResult->lastname); // send email to admins saying the user was activated
+				}
+			}
+			else {
+				$jsonResponse = $response->getRawBody(); // unsuccessful request
+			}
+			
+			// check if there was an unexpected message
+			if(!in_array($response->getRawBody(), array("User Removed Successfully", "User Added Successfully"))) {
+				$jsonResponse = "Unexpected Response";
+			}
+		} else {
+			$jsonResponse = "Unexpected Status";
+		}
+		
+		echo json_encode($jsonResponse);
+		Yii::app()->end();	
+	}
 	public function actionUserValidate($badge,$isHex = false)
 	{
 		header('Content-type: application/json');

@@ -74,7 +74,7 @@ class Badges extends CActiveRecord
 				Yii::app()->user->setFlash('success', $response->getBody());	
 				$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id); // for getting first and last name
 				if ("User Added Successfully" == $response->getRawBody()) {
-					Controller::sendActivatedEmail($userResult->firstname . ' ' . $userResult->lastname);
+					Controller::sendActivatedEmail($userResult->firstname . ' ' . $userResult->lastname); // send email telling admins the user was activated
 				}
 				// could also add e-mail for deactivation
 			}
@@ -83,10 +83,9 @@ class Badges extends CActiveRecord
 			}
 			
 			// check if there was an unexpected message
-			// TODO: Check if this is effective
-			if(("User Added Successfully" != $response->getRawBody()) AND ("User Removed Successfully" != $response->getRawBody())) {
+			if(!in_array($response->getRawBody(), array("User Removed Successfully", "User Added Successfully"))) {
 				$this->status = "Pending";
-				Yii::app()->user->setFlash('error', "Adding Or Removing User Failed");
+				throw new Exception("Unexpected Response");
 			}
 		}
 		return parent::beforeSave();
@@ -133,7 +132,7 @@ class Badges extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>false,
+			'pagination'=>false, // TODO: can't enable pagination until I figure out how to filter columns from another database, it would be too hard to search for specific names
 		));
 	}
 
