@@ -68,34 +68,24 @@ class Badges extends CActiveRecord
 			
 			$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id);
 		} else {
-			Yii::import('ext.EHttpClient.*');
-			if ($this->status == "Active") {
-				$client = new EHttpClient('https://physical.dallasmakerspace.org/accessControlApi/?apiKey=iQu3Vae5Eb6room3Eeb7IeGhEeNg2fai&action=add&badge=' . $this->badge, array('maxredirects' => 0,'timeout' => 30));
-				$response = $client->request();
-				 
-				if($response->isSuccessful())
-					Yii::app()->user->setFlash('success', $response->getBody());				 
-				else
-					Yii::app()->user->setFlash('error', $response->getRawBody());	
-					
-				if("User Added Successfully" != $response->getRawBody()) {
-					$this->status = "Pending";
-					Yii::app()->user->setFlash('error', "Adding User Failed");
-				}
-			} elseif ($this->status == "Deactivated") {
-				$client = new EHttpClient('https://physical.dallasmakerspace.org/accessControlApi/?apiKey=iQu3Vae5Eb6room3Eeb7IeGhEeNg2fai&action=remove&badge=' . $this->badge, array('maxredirects' => 0,'timeout' => 30));
-				$response = $client->request();
-				 
-				if($response->isSuccessful())
-					Yii::app()->user->setFlash('success', $response->getBody());				 
-				else
-					Yii::app()->user->setFlash('error', $response->getRawBody());
-
-				if("User Removed Successfully" != $response->getRawBody()) {
-					$this->status = "Pending";
-					Yii::app()->user->setFlash('error', "Removing User Failed");
-				}
+			Yii::import('application.components.Controller'); // get activateOrDeactivateBadge function from Controller.php
+			$response =  Controller::activateOrDeactivateBadge($this->status, $this->badge);
+			
+			if($response->isSuccessful())
+				Yii::app()->user->setFlash('success', $response->getBody());				 
+			else
+				Yii::app()->user->setFlash('error', $response->getRawBody());
+				
+			if("User Added Successfully" != $response->getRawBody()) {
+				$this->status = "Pending";
+				Yii::app()->user->setFlash('error', "Adding User Failed");
 			}
+			elseif("User Removed Successfully" != $response->getRawBody()) {
+				$this->status = "Pending";
+				Yii::app()->user->setFlash('error', "Removing User Failed");
+			}
+							 
+					
 		}
 		return parent::beforeSave();
 	}
