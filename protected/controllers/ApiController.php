@@ -2,37 +2,41 @@
 
 class ApiController extends Controller
 {
-	public function actionIndex()
+	public function actionBadgeActivateOrDeactivate($status, $apiKey, $whmcs_user_id)
 	{
-		$this->render('index');
-	}
-
-	public function actionBadgeActivateOrDeactivate($status, $badge, $apiKey)
-	{
-		if (in_array($status, array("Active", "Deactivated"))) {
-			$response = activateOrDeactivateBadge($status, $badge);
-			
-			if($response->isSuccessful()) {
-				$userResult = WHMCSclients::model()->findByPk($this->whmcs_user_id); // for getting first and last name
-				if ("User Added Successfully" == $response->getRawBody()) {
-					//Controller::sendActivatedEmail($userResult->firstname . ' ' . $userResult->lastname); // send email to admins saying the user was activated
+		header('Content-type: application/json');
+		
+		$jsonResponse = array();
+		if ($this->isValidApiKey($apiKey)) {
+			if (in_array($status, array("Active", "Deactivated"))) {
+				$badges = Badges::model()->findAll(array("select"=>"id, badge", "condition"=>"whmcs_user_id = $whmcs_user_id"));
+				foreach($badges as $badge)
+				{
+					$response = $this->activateOrDeactivateBadge($status, $badge->badge);
+					if($response->isSuccessful() and in_array($response->getRawBody(), array("User Removed Successfully", "User Added Successfully"))) {
+						//$userResult = WHMCSclients::model()->findByPk($whmcs_user_id); // for getting first and last name
+						//Controller::sendActivatedEmail($userResult->firstname . ' ' . $userResult->lastname); // send email to admins saying the user was activated
+						$jsonResponse[] = $badge->id . ': '. $response->getRawBody();
+						Badges::model()->updateAll(array('status'=>$status), "id = " . $badge->id);						
+					}
+					else {
+						$jsonResponse = $response->getRawBody(); // unsuccessful request or unexpected message
+						break;
+					}
 				}
-			}
-			else {
-				$jsonResponse = $response->getRawBody(); // unsuccessful request
-			}
-			
-			// check if there was an unexpected message
-			if(!in_array($response->getRawBody(), array("User Removed Successfully", "User Added Successfully"))) {
-				$jsonResponse = "Unexpected Response";
+				if (!count($badges)) {
+					$jsonResponse = "No Badges";
+				}
+			} else {
+				$jsonResponse = "Unexpected Status";
 			}
 		} else {
-			$jsonResponse = "Unexpected Status";
+			$jsonResponse = "Invalid API Key";
 		}
-		
 		echo json_encode($jsonResponse);
 		Yii::app()->end();	
 	}
+	
 	public function actionUserValidate($badge,$isHex = false)
 	{
 		header('Content-type: application/json');
