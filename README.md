@@ -14,4 +14,4 @@ Create a MySQL database called "dms_crm" and import the database schema for the 
 The file accessControlWebservice.py in protected/data/ needs to be placed on the server connected to the access controller. It's a webserver that Maker Manager communicates with ication with the access controller. A quick way to make sure it's running at startup is by creating a cronjob for it with the @reboot command.
 
 #### Technical
-Maker Manager is built using a PHP framework called Yii for a MySQL database. The frontend was mostly done using Twitter Bootstrap. The parts which interact with the access control system are written in Python.
+Maker Manager is built using a PHP framework called Yii and it uses a MySQL database. The frontend was mostly done using Twitter Bootstrap. The parts which interact with the access control system are written in Python.
