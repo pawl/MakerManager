@@ -28,7 +28,7 @@ class Badges extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('badge', 'required'),
-			array('whmcs_user_id, badge', 'numerical', 'integerOnly'=>true),
+			array('whmcs_user_id, badge', 'numerical', 'integerOnly'=>true, 'min'=>1),
 			array('status', 'length', 'max'=>16),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

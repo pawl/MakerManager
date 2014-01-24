@@ -28,7 +28,7 @@ class TrainingMembers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('whmcs_user_id, tool_id', 'numerical', 'integerOnly'=>true),
+			array('whmcs_user_id, tool_id', 'numerical', 'integerOnly'=>true, 'min'=>1),
 			array('trainer_id', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>12),
 			// The following rule is used by search().
