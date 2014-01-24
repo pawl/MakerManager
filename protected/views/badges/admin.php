@@ -45,7 +45,7 @@ return false;
 		array(
 			'type'=>'raw',
 			'header'=>'Name',
-			'value'=>'(isset($data->whmcs))?$data->whmcs->firstname:"Missing From WHMCS" . " " . (isset($data->whmcs))?$data->whmcs->lastname:""',
+			'value'=>'$data->whmcs->firstname . " " . $data->whmcs->lastname',
 		),
 		'whmcs.email',
 		'badge',
