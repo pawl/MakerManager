@@ -28,6 +28,7 @@ class Badges extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('badge', 'required'),
+			array('badge', 'ext.UniqueAttributesValidator', 'with'=>'whmcs_user_id'),
 			array('whmcs_user_id, badge', 'numerical', 'integerOnly'=>true, 'min'=>1),
 			array('status', 'length', 'max'=>16),
 			// The following rule is used by search().
