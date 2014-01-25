@@ -129,30 +129,31 @@ class Controller extends CController
 
 	public function whmcsUserListData($onlyUsersWithBadge = false)
 	{
-		// get list of user ids with active badges
-		$activeBadges = Yii::app()->db->createCommand()
-		->select('whmcs_user_id')
-		->from('tbl_badges')
-		->where('status=:status', array(':status'=>"Active"))
-		->queryColumn();	
-		
-		$criteria = new CDbCriteria;
-		
-		// only paid members show in dropdown
-		$criteria->addCondition("status='Active'");
-		
-		// no users with active badges are in the email dropdown
-		if ($activeBadges) {
-			$activeBadges = implode(",", $activeBadges);
-			if (!$onlyUsersWithBadge) {
-				$criteria->addCondition('id not in (' . $activeBadges . ')');
-			} else {
-				$criteria->addCondition('id in (' . $activeBadges . ')');
-			}
-		}
-		$criteria->order = 'email ASC';
-		
-		$activeUsersList = WHMCSclients::model()->findAll($criteria);
-		return CHtml::listData($activeUsersList, 'id', 'email');
+                // get list of user ids with active badges
+                // badges returned from this query will not be included in the dropdown
+                $activeBadges = Yii::app()->db->createCommand()
+                ->select('whmcs_user_id')
+                ->from('tbl_badges')
+                ->where('status=:status', array(':status'=>"Active"))
+                ->queryColumn();
+
+                $criteria = new CDbCriteria;
+
+                // only Active or Pending members show in dropdown
+                $criteria->addCondition("status='Active' or status='Pending'");
+
+                // no users with active badges are in the email dropdown
+                if ($activeBadges) {
+                        $activeBadges = implode(",", $activeBadges);
+                        if (!$onlyUsersWithBadge) {
+                                $criteria->addCondition('id not in (' . $activeBadges . ')');
+                        } else {
+                                $criteria->addCondition('id in (' . $activeBadges . ')');
+                        }
+                }
+                $criteria->order = 'email ASC';
+
+                $activeUsersList = WHMCSclients::model()->findAll($criteria);
+                return CHtml::listData($activeUsersList, 'id', 'email');
 	}
 }
