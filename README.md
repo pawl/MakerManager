@@ -9,6 +9,10 @@ It features the following:
 * An API, so our billing system can automatically deactivate and activate badges when there is a need.
 * Integration with our billing system's database for getting user information.
 
+Planned featuers:
+* A system which tracks training and requests for training.
+* Modifications to the accessControlWebservice.py to allow for grabbing the logs from the access control system.
+
 #### Setup
 You will need to have WHMCS installed. If you don't have WHMCS installed, you will need to rewrite a lot of the code to rely on some other database for user information.
 
