@@ -12,6 +12,8 @@ It features the following:
 #### Setup
 You will need to have WHMCS installed. If you don't have WHMCS installed, you will need to rewrite a lot of the code to rely on some other database for user information.
 
+You will need to modify "db" and "dbwhmcs" in /protected/config/main.php to match your own database settings.
+
 Create a MySQL database called "dms_crm" and import the database schema for the "tbl_badges" table located in protected/data/badges.sql.
 
 The file accessControlWebservice.py in protected/data/ needs to be placed on the server connected to the access controller. It's a webserver that Maker Manager communicates with the access controller. A quick way to make sure it's running at startup is by creating a cronjob for it with the @reboot command.
