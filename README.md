@@ -4,13 +4,13 @@ Maker-Manager
 Maker Manager was developed to solve administrative challenges for Dallas Makerspace.
 
 It features the following:
-* Integration with our billing system (WHMCS)
 * A self-documenting place to activate and deactivate badges.
 * A web interface for Dallas Makerspace's access control system.
 * An API, so our billing system can automatically deactivate and activate badges when there is a need.
+* Integration with our billing system's database for getting user information.
 
 #### Setup
-A lot of the code depends on having WHMCS installed and the database available. If you don't have WHMCS installed and its database available, you will need to rewrite a lot of the code.
+You will need to have WHMCS installed. If you don't have WHMCS installed, you will need to rewrite a lot of the code to rely on some other database for user information.
 
 Create a MySQL database called "dms_crm" and import the database schema for the "tbl_badges" table located in protected/data/badges.sql.
 
