@@ -112,6 +112,7 @@ class ApiController extends Controller
 					'rfid' => (int) $badge,
 					'machine_id' => (int) $tool,
 					'timeout' => (int) $timeoutResult,
+					'session' => time(),
 				);			
 				
 				// save tool activity to database
