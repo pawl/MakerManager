@@ -9,8 +9,8 @@ It features the following:
 * An API, so our billing system can automatically deactivate and activate badges when there is a need.
 * Integration with our billing system's database for getting user information.
 
-Planned featuers:
-* A system which tracks training and requests for training.
+Planned features:
+* A system which tracks training and requests for training. Pictures of the progress: http://imgur.com/a/Nm0kN
 * Modifications to the accessControlWebservice.py to allow for grabbing the logs from the access control system.
 
 #### Setup
