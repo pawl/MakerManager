@@ -12,9 +12,9 @@ class RootServer:
     def index(self, apiKey=None, action=None, badge=None):
 		if (apiKey == "secret"):
 			if badge:
-				formattedID = str(("{0:x}".format(int(badge))).zfill(8))
 				if len(badge) > 8:
 					return "Error: Too many digits in Badge"
+				formattedID = str(("{0:x}".format(int(badge))).zfill(8))
 				if (action == "remove"):	
 					# try to terminate the user up to 5 times
 					userRemoved = 0
