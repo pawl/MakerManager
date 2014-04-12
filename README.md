@@ -16,7 +16,9 @@ Planned features:
 #### Setup
 You will need to have WHMCS installed. If you don't have WHMCS installed, you will need to rewrite a lot of the code to rely on some other database for user information.
 
-You will need to modify "db" and "dbwhmcs" in /protected/config/main.php to match your own database settings.
+You will need rename "db_example.php" and "whmcs_db_example.php" in /protected/config/ to "db.php" and "whmcs_db.php" and modify them for your own database settings.
+
+Also rename "params_example.php" in /protected/config/ to "params.php" add your own api keys for the access control webservice and WHMCS.
 
 Create a MySQL database called "dms_crm" and import the database schema for the "tbl_badges" table located in protected/data/badges.sql.
 
