@@ -5,10 +5,14 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
+Yii::setPathOfAlias('editable', dirname(__FILE__).'/../extensions/editable');
+
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Maker Manager',
-
+	'aliases' => array(
+			'RestfullYii' =>realpath(__DIR__ . '/../extensions/starship/RestfullYii'),
+    ),
 	// preloading 'log' component
 	'preload'=>array('log','bootstrap'),
 
@@ -16,6 +20,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'editable.*',
 	),
 
 	'modules'=>array(
@@ -23,7 +28,7 @@ return array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'secret',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			//'ipFilters'=>array('127.0.0.1','::1'),
+			//'ipFilters'=>array('1.1.1.1'),
 			'generatorPaths' => array(
 				'bootstrap.gii'
 			),
@@ -40,44 +45,29 @@ return array(
 			'class' => 'ext.bootstrap.components.Bootstrap',
 			'responsiveCss' => true,
 		),
+		'editable' => array(
+            'class'     => 'editable.EditableConfig',
+            'form'      => 'bootstrap', 
+            'mode'      => 'popup',      
+            'defaults'  => array(        
+               'emptytext' => 'Click to edit',
+               //'ajaxOptions' => array('dataType' => 'json') //usefull for json exchange with server
+            )
+        ),
 		'CURL' =>array(
 		   'class' => 'ext.curl.Curl',
 		),
-		// uncomment the following to enable URLs in path-format
-		/*
 		'urlManager'=>array(
-			'urlFormat'=>'path',
+			//'urlFormat'=>'path',
 			'rules'=>array(
-				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				//'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+				//'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+				//'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				dirname(__FILE__).'/../extensions/starship/restfullyii/config/routes.php',
 			),
 		),
-		*/
-		// uncomment the following to use a MySQL database
-		/*
-		'db'=>array(
-			'connectionString'=>'mysql:host=localhost;dbname=dms_crm',
-			'username'=>'dmsadmin',
-			'password'=>'1complexPassword',
-		),
-		*/
-		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=dms_crm',
-			'emulatePrepare' => true,
-			'username' => 'user',
-			'password' => 'secret',
-			'charset' => 'utf8',
-			'class'=>'CDbConnection',
-		),
-        'dbwhmcs' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=dms-whmcs',
-			'emulatePrepare' => true,
-            'username'         => 'user',
-            'password'         => 'secret',
-			'charset' => 'utf8',
-			'class'=>'CDbConnection',
-        ),
+		'db'=> require(dirname(__FILE__) . '/db.php'),
+        'dbwhmcs' => require(dirname(__FILE__) . '/whmcs_db.php'),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
@@ -107,13 +97,5 @@ return array(
 
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
-	'params'=>array(
-		// this is used in contact page
-		'adminEmail'=>'paul.brown@dallasmakerspace.org',
-		'ldap' => array(
-			'host' => 'localhost',
-			'ou' => 'people', // such as "people" or "users"
-			'dc' => array('dallasmakerspace','org'),
-		),
-	),
+	'params'=>require(dirname(__FILE__).'/params.php'),
 );
