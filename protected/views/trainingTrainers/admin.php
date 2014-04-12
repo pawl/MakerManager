@@ -36,7 +36,7 @@ return false;
 		</span>
 	</span>
 </div>
-
+<p>This page is intended for administrators and is used for viewing the list of approved tool trainers.</p>
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 'id'=>'training-trainers-grid',
 'template' => "{items}",

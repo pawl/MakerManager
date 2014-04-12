@@ -16,11 +16,11 @@
 	<br>
 	<div class='formField'>
 		<?php 
-		echo CHtml::label('<strong>User E-mail</strong>', 'whmcs_user_id', array('style' => 'display: inline;'));
+		echo CHtml::label('<strong>Member Name</strong>', 'whmcs_user_id', array('style' => 'display: inline;'));
 		echo '<span class="required" style="display: inline-block;">*</span>';
 		echo '<br><small>Note: Only showing paid members without an active badge.</small><br>';
 		// whmcsUserListData function will grab the list of whmcs_user_ids + emails 
-		echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData(), array('empty'=>'Select User by Email')); 
+		echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData(), array('empty'=>'Select Name')); 
 		?>
 	</div>
 	
@@ -35,7 +35,7 @@
 	
 	<?php 
 	echo "<div class='formField'>";
-	echo CHtml::label('<strong>Has the user signed a <a href="https://dallasmakerspace.org/wiki/File:Access_Acknowledgement_and_Liability_Release.pdf">liability waiver</a>?</strong>', 'liabilityWaiver', array('style' => 'display: inline;'));
+	echo CHtml::label('<strong>Has the member signed a <a href="https://dallasmakerspace.org/wiki/File:Access_Acknowledgement_and_Liability_Release.pdf">liability waiver</a>?</strong>', 'liabilityWaiver', array('style' => 'display: inline;'));
 	echo "<span class='required' style='display: inline-block;'>*</span>
 	<br>
 	<small>Note: You can scan it and place it on top of the file cabinet in the security room.</small>

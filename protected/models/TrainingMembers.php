@@ -31,6 +31,10 @@ class TrainingMembers extends CActiveRecord
 			array('whmcs_user_id, tool_id', 'numerical', 'integerOnly'=>true, 'min'=>1),
 			array('trainer_id', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>12),
+			
+			// force unique whmcs_user_id + tool_id, no one should be trained twice on the same tool
+			array('whmcs_user_id', 'ext.UniqueAttributesValidator', 'with'=>'tool_id'),
+			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, whmcs_user_id, tool_id, trainer_id, status', 'safe', 'on'=>'search'),

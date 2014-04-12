@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=array(
-	'Training'=>array('index'),
+	'Training'=>array('admin'),
 	'Manage',
 );
 
@@ -37,6 +37,8 @@ return false;
 	</span>
 </div>
 
+<p>This page is intended for administrators and is used for approving training requests.</p>
+
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 'id'=>'training-members-grid',
 'template' => "{items}",
@@ -63,7 +65,7 @@ return false;
                'editable' => array(
                   'type'     => 'select',
                   'url'      => $this->createUrl('editable'),
-                  'source'   => Editable::source(array('Trained' => 'Trained')),
+                  'source'   => Editable::source(array('Pending' => 'Pending', 'Trained' => 'Trained', 'Untrained' => 'Untrained')),
 				  'emptytext' => 'Pending',
               )
         ),

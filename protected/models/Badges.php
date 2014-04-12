@@ -58,6 +58,17 @@ class Badges extends CActiveRecord
 		}
 		return $this->_whmcsEmail;
 	}
+	
+	function getFullName()
+	{
+		return $this->whmcs->firstname . " " . $this->whmcs->lastname;
+	}
+	
+	function getFullNameAndEmail()
+	{
+		return $this->whmcs->firstname . " " . $this->whmcs->lastname . " - " . $this->whmcs->email;
+	}
+
 	public function setWhmcsEmail($value)
 	{
 		$this->_whmcsEmail = $value;

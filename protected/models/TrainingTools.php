@@ -8,6 +8,8 @@
  * @property string $tool_mac_address
  * @property string $tool_name
  * @property integer $timeout
+ * @property string $combination_lock_code
+ * @property integer $combination_lock_code_length
  */
 class TrainingTools extends CActiveRecord
 {
@@ -27,12 +29,12 @@ class TrainingTools extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('timeout', 'numerical', 'integerOnly'=>true),
+			array('timeout, combination_lock_code_length', 'numerical', 'integerOnly'=>true),
 			array('tool_mac_address', 'length', 'max'=>12),
-			array('tool_name', 'length', 'max'=>255),
+			array('tool_name, combination_lock_code', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, tool_mac_address, tool_name, timeout', 'safe', 'on'=>'search'),
+			array('id, tool_mac_address, tool_name, timeout, combination_lock_code, combination_lock_code_length', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,6 +59,8 @@ class TrainingTools extends CActiveRecord
 			'tool_mac_address' => 'Tool Mac Address',
 			'tool_name' => 'Tool Name',
 			'timeout' => 'Timeout',
+			'combination_lock_code' => 'Combination Lock Code',
+			'combination_lock_code_length' => 'Combination Lock Code Length',
 		);
 	}
 
@@ -82,6 +86,8 @@ class TrainingTools extends CActiveRecord
 		$criteria->compare('tool_mac_address',$this->tool_mac_address,true);
 		$criteria->compare('tool_name',$this->tool_name,true);
 		$criteria->compare('timeout',$this->timeout);
+		$criteria->compare('combination_lock_code',$this->combination_lock_code,true);
+		$criteria->compare('combination_lock_code_length',$this->combination_lock_code_length);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

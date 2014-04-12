@@ -67,7 +67,7 @@ public function actionCreate()
 		$model->attributes=$_POST['Badges'];
 		Yii::app()->user->setFlash('success', "Request Submitted Successfully");
 		if($model->save())
-			$this->sendActivationEmail($model->whmcs->firstname . " " . $model->whmcs->lastname, $model->id);
+			$this->sendActivationEmail($model->fullName, $model->id);
 		$this->redirect(array('create'));
 	}
 	

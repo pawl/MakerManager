@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=array(
-	'Training Members'=>array('index'),
+	'Training Members'=>array('admin'),
 	$model->id=>array('view','id'=>$model->id),
 	'Update',
 );

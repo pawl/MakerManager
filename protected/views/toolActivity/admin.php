@@ -17,7 +17,9 @@ return false;
 ");
 ?>
 
-<h1 style="margin:0;">Tool Activity</h1>
+<h1 style="margin:0; margin-bottom: 5px;">Tool Activity</h1>
+
+<p>This page is intended for administrators and is used for viewing when the RFID interlock was used.</p>
 
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 'id'=>'tool-activity-grid',

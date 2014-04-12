@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=array(
-	'Training Tools'=>array('index'),
+	'Training Tools'=>array('admin'),
 	'Manage',
 );
 
@@ -37,6 +37,8 @@ return false;
 	</span>
 </div>
 
+<p>This page is intended for administrators. It shows combination lock codes and other information used by the RFID interlock API. </p>
+
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 'id'=>'training-tools-grid',
 'dataProvider'=>$model->search(),
@@ -44,9 +46,9 @@ return false;
 'filter'=>$model,
 'columns'=>array(
 		'id',
-		'tool_mac_address',
 		'tool_name',
-		'timeout',
+		'tool_mac_address',
+		'combination_lock_code',
 array(
 'class'=>'bootstrap.widgets.TbButtonColumn',
 'template'=>'{update}',

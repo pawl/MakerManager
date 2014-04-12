@@ -24,7 +24,8 @@
 				array('label'=>'Manage Badges', 'url'=>array('/badges/admin'), 'visible'=>Yii::app()->user->getId() == "admin"),
 				array('label'=>'Training', 
 					'items' => array(
-                    array('label' => 'Request Training', 'url' => array('/TrainingMembers/create')),
+					array('label' => 'My Tool Access', 'url' => array('/TrainingToolsUser/index')),
+                    array('label' => 'Request Training Approval', 'url' => array('/TrainingMembers/create')),
                     array('label' => 'Trained Members', 'url' => array('/TrainingMembers/admin')),
                     array('label' => 'Tools', 'url' => array('/TrainingTools/admin')),
                     array('label' => 'Tool Activity', 'url' => array('/ToolActivity/admin')),

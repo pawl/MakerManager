@@ -49,9 +49,15 @@ return false;
 		),
 		'whmcs.email',
 		'badge',
+		array(
+			'type'=>'raw',
+			'header'=>'WHMCS Status',
+			'value'=>'$data->whmcs->status',
+		),
 		array( 
               'class' => 'editable.EditableColumn',
               'name' => 'status',
+			  'header'=>'Badge Status',
               'headerHtmlOptions' => array('style' => 'width: 100px'),
               'editable' => array(
                   'type'     => 'select',

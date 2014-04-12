@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=array(
-	'Training Tools'=>array('index'),
+	'Training Tools'=>array('admin'),
 	'Create',
 );
 

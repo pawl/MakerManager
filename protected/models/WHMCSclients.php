@@ -94,6 +94,16 @@ class WHMCSclients extends CActiveRecord
 		return array(
 		);
 	}
+	
+	function getFullName()
+	{
+		return $this->firstname . " " . $this->lastname;
+	}
+	
+	function getFullNameAndEmail()
+	{
+		return $this->firstname . " " . $this->lastname . " - " . $this->email;
+	}
 
 	/**
 	 * @return array customized attribute labels (name=>label)
