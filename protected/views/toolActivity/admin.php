@@ -24,7 +24,7 @@ return false;
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 'id'=>'tool-activity-grid',
 'dataProvider'=>$model->search(),
-'template' => "{items}",
+'template' => "{summary}{items}\n<center>{pager}<center>",
 'filter'=>$model,
 'columns'=>array(
 		array(
@@ -33,7 +33,29 @@ return false;
 			'value'=>'$data->whmcs->firstname . " " . $data->whmcs->lastname',
 		),
 		'tools.tool_name',
-		'activity_start',
-		'activity_end',
+		array(
+			'name'=>'activity_start',
+			'value'=> function($data){
+						if($data->activity_start){
+							$date = date('Y-m-d H:i:s',strtotime($data->activity_start.' UTC'));
+						}else{
+							$date = "";
+						}
+						return $date;
+					},
+			'type' => 'raw',
+		),
+		array(
+			'name'=>'activity_end',
+			'value'=> function($data){
+						if($data->activity_end){
+							$date = date('Y-m-d H:i:s',strtotime($data->activity_end.' UTC'));
+						}else{
+							$date = "";
+						}
+						return $date;
+					},
+			'type' => 'raw',
+		),
 ),
 )); ?>

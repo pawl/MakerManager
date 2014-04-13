@@ -72,6 +72,9 @@ class ApiController extends Controller
 		Yii::app()->end();	
 	}
 	
+	// verify if an user is allowed to use a tool by using their badge# and the tool_id
+	// $tool is the ID of the tool shown on the maker manager interface
+	// $isHex is for using the hex version of the RFID
 	public function actionToolValidate($badge,$tool,$isHex = false)
 	{
 		header('Content-type: application/json');
@@ -107,19 +110,22 @@ class ApiController extends Controller
 			
 			if ($authResult == "Trained") {
 				// success - user trained
+				date_default_timezone_set('UTC');
+				$currentTime = date('Y-m-d H:i:s');
+				
 				$jsonResponse = array(
 					'authorized' => (bool) 1,
 					'rfid' => (int) $badge,
 					'machine_id' => (int) $tool,
 					'timeout' => (int) $timeoutResult,
-					'session' => time(),
+					'session' => strtotime($currentTime),
 				);			
 				
 				// save tool activity to database
 				$toolActivityModel = new ToolActivity;
 				$toolActivityModel->whmcs_user_id = $userid;
 				$toolActivityModel->tool_id = $tool;
-				$toolActivityModel->activity_start = new CDbExpression('NOW()');
+				$toolActivityModel->activity_start = $currentTime;
 				$toolActivityModel->activity_end = NULL;
 				$toolActivityModel->save(); 
 			} else {
@@ -138,6 +144,39 @@ class ApiController extends Controller
 				'rfid' => (int) $badge,
 			);
 		}
+		echo json_encode($jsonResponse);
+		
+		Yii::app()->end();
+	}
+	
+	// this api end point is for adding an Activity End time to the activity log
+	// it's for when the tool is turned off
+	// session= is the session id returned when you successfully authenticate
+	// tool= is the tool_id
+	//it returns "success" in json, true or false, depending if updating the record with an activity end date is successful
+	public function actionToolEndSession($session,$tool)
+	{
+		header('Content-type: application/json');
+		
+		date_default_timezone_set('UTC');
+		// update activity_end
+		$queryResult = Yii::app()->db
+		->createCommand("UPDATE tbl_tool_activity SET activity_end = NOW() WHERE tool_id=:tool_id and activity_start=:session")
+		->bindValues(array(':tool_id' => (int) $tool, ':session' =>  date('Y-m-d H:i:s', $session)))
+		->execute();
+		
+		if ($queryResult) {
+			// success - matches a record in the database and activity_end was updated
+			$jsonResponse = array(
+				'success' => (bool) 1,
+			);			
+		} else {
+			// fail - no matching record updated
+			$jsonResponse = array(
+				'success' => (bool) 0,
+			);
+		}
+
 		echo json_encode($jsonResponse);
 		
 		Yii::app()->end();
