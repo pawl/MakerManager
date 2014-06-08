@@ -36,7 +36,11 @@ return false;
 	</span>
 </div>
 
-<?php $this->widget('bootstrap.widgets.TbExtendedGridView',array(
+<?php 
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
+
+$this->widget('bootstrap.widgets.TbExtendedGridView',array(
 'id'=>'badges-grid',
 'template' => "{items}",
 'dataProvider'=>$model->search(),
@@ -51,8 +55,8 @@ return false;
 		'badge',
 		array(
 			'type'=>'raw',
-			'header'=>'WHMCS Status',
-			'value'=>'$data->whmcs->status',
+			'header'=>'Active Products<br>& Addons',
+			'value'=>'count($data->products) + count($data->addons)',
 		),
 		array( 
               'class' => 'editable.EditableColumn',

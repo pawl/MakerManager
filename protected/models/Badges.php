@@ -44,8 +44,12 @@ class Badges extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
+		
+		// TODO: make the products relation faster
 		return array(
 			'whmcs'=>array(self::BELONGS_TO, 'WHMCSclients', 'whmcs_user_id'),
+			'products'=>array(self::HAS_MANY, 'WHMCSproducts', array('id' => 'userid'), 'through' => 'whmcs', 'condition'=>'products.domainstatus="Active"'),
+			'addons'=>array(self::HAS_MANY, 'WHMCSaddons', array('id' => 'hostingid'), 'through' => 'products', 'condition'=>'addons.status="Active"'),
 		);
 	}
 	
@@ -62,11 +66,6 @@ class Badges extends CActiveRecord
 	function getFullName()
 	{
 		return $this->whmcs->firstname . " " . $this->whmcs->lastname;
-	}
-	
-	function getFullNameAndEmail()
-	{
-		return $this->whmcs->firstname . " " . $this->whmcs->lastname . " - " . $this->whmcs->email;
 	}
 
 	public function setWhmcsEmail($value)
