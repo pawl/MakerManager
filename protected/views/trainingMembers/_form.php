@@ -11,7 +11,7 @@
 		echo '<span class="required" style="display: inline-block;">*</span>';
 		echo '<br><small>Note: Only showing members with an active badge.</small><br>';
 		// whmcsUserListData function will grab the list of whmcs_user_ids + emails 
-		echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData($onlyUsersWithBadge = true), array('empty'=>'Select User by Email')); 
+		echo $form->dropDownList($model, 'whmcs_user_id', $this->activeUserList(), array('empty'=>'Select User by Email')); 
 	?>
 	
 	<div>

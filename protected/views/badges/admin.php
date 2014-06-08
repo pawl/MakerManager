@@ -37,8 +37,8 @@ return false;
 </div>
 
 <?php 
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
+//error_reporting(E_ALL);
+//ini_set('display_errors', 'on');
 
 $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 'id'=>'badges-grid',

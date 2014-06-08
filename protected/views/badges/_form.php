@@ -19,8 +19,8 @@
 		echo CHtml::label('<strong>Member Name</strong>', 'whmcs_user_id', array('style' => 'display: inline;'));
 		echo '<span class="required" style="display: inline-block;">*</span>';
 		echo '<br><small>Note: Only showing paid members without an active badge.</small><br>';
-		// whmcsUserListData function will grab the list of whmcs_user_ids + emails 
-		echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData(), array('empty'=>'Select Name')); 
+		// noBadgeUserList function will grab the list of whmcs_user_ids + emails 
+		echo $form->dropDownList($model, 'whmcs_user_id', $this->noBadgeUserList(), array('empty'=>'Select Name')); 
 		?>
 	</div>
 	

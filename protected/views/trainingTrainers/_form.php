@@ -10,7 +10,7 @@
 	<?php 
 	echo CHtml::label('Trainer', 'TrainingTrainers_whmcs_user_id', array('style' => 'display: inline;'));
 	echo '<span class="required" style="display: inline-block;">*</span><br>';
-	echo $form->dropDownList($model, 'whmcs_user_id', $this->whmcsUserListData($onlyUsersWithBadge = true), array('empty'=>'Select Trainer by Email')); 
+	echo $form->dropDownList($model, 'whmcs_user_id', $this->activeUserList(), array('empty'=>'Select Trainer by Email')); 
 	?>
 	
 	<div>
