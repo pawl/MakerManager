@@ -186,7 +186,7 @@ class Controller extends CController
 		// badges returned from this query will not be included in the dropdown
 		$active_badges_query = '
 		SELECT
-	      whmcs_user_id
+	          whmcs_user_id
 		FROM (
 		  SELECT
 			distinct `dms-whmcs`.tblclients.id as whmcs_user_id,
