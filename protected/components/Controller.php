@@ -24,7 +24,7 @@ class Controller extends CController
 	public function sendActivationEmail($fullname, $id)
     {
 		// multiple recipients
-		$to  = 'admin@dallasmakerspace.org';
+		$to  = Yii::app()->params['adminEmail'];
 
 		// subject
 		$subject = 'Badge Pending Activation';
@@ -55,7 +55,7 @@ class Controller extends CController
 	public function sendActivatedEmail($fullname)
     {
 		// multiple recipients
-		$to  = 'admin@dallasmakerspace.org';
+		$to  = Yii::app()->params['adminEmail'];
 
 		// subject
 		$subject = 'Badge Activated';
@@ -82,11 +82,13 @@ class Controller extends CController
 		mail($to, $subject, $message, $headers);
 	}
 
+	// function to automatically authenticate users for WHMCSclient, so only LDAP login is required to get to WHMCS
+	// http://docs.whmcs.com/AutoAuth
     public function whmcsUrl()
     {
 		$whmcsurl = "http://www.dallasmakerspace.org/accounts/dologin.php";
-		// autoauthkey is secret
-		$autoauthkey = "secret";
+
+		$autoauthkey = Yii::app()->params['autoAuthKey']; 
 
 		$timestamp = time(); # Get current timestamp
 		$email = Yii::app()->user->getState('email'); # Clients Email Address to Login
@@ -102,7 +104,7 @@ class Controller extends CController
 	
 	public function isValidApiKey($apiKey)
 	{
-		if ($apiKey == "secret") {
+		if ($apiKey == Yii::app()->params['accessControlApiKey']) {
 			return 1;
 		} else {
 			return 0;
@@ -113,7 +115,7 @@ class Controller extends CController
 	{
 		Yii::import('ext.EHttpClient.*');
 		// apikey is secret
-		$apiURL = 'https://physical.dallasmakerspace.org/accessControlApi/?apiKey=secret&action=';
+		$apiURL = 'https://physical.dallasmakerspace.org/accessControlApi/?apiKey=' . Yii::app()->params['accessControlApiKey'] . '&action=';
 		if ($status == "Active") {
 			$addOrRemove = 'add';			
 		} elseif ($status == "Deactivated") {
@@ -127,33 +129,115 @@ class Controller extends CController
 		return $response;
 	}
 
-	public function whmcsUserListData($onlyUsersWithBadge = false)
+	public function getWhmcsUserID($email)
 	{
-                // get list of user ids with active badges
-                // badges returned from this query will not be included in the dropdown
-                $activeBadges = Yii::app()->db->createCommand()
-                ->select('whmcs_user_id')
-                ->from('tbl_badges')
-                ->where('status=:status', array(':status'=>"Active"))
-                ->queryColumn();
-
-                $criteria = new CDbCriteria;
-
-                // only Active or Pending members show in dropdown
-                $criteria->addCondition("status='Active' or status='Pending'");
-
-                // no users with active badges are in the email dropdown
-                if ($activeBadges) {
-                        $activeBadges = implode(",", $activeBadges);
-                        if (!$onlyUsersWithBadge) {
-                                $criteria->addCondition('id not in (' . $activeBadges . ')');
-                        } else {
-                                $criteria->addCondition('id in (' . $activeBadges . ')');
-                        }
-                }
-                $criteria->order = 'email ASC';
-
-                $activeUsersList = WHMCSclients::model()->findAll($criteria);
-                return CHtml::listData($activeUsersList, 'id', 'email');
+		$criteria = new CDbCriteria;
+		$criteria->addCondition("email='{$email}'");
+		
+		$user = WHMCSclients::model()->find($criteria)->id;
+		return $user;
 	}
+	
+	public function activeUserList()
+	{	
+		// TODO: Use ORM instead
+		$active_badges_query = '
+		SELECT
+		  whmcs_user_id
+		FROM (select
+		  distinct whmcs_user_id,
+		  IF(active_badge_count > 0, "Has Badge", "No Badges") as badges_status
+		from
+		  ( select
+			  whmcs_user_id,
+			  count(*) as active_badge_count
+			from `dms_crm`.`tbl_badges`
+			where status = "Active"
+			group by whmcs_user_id
+		  ) as badges
+		  ) as active_badges_query
+		where badges_status = "Has Badge"';
+		
+		$list= Yii::app()->db->createCommand($active_badges_query)->queryAll();
+		$activeBadges=array();
+		foreach($list as $item){
+			//process each item here
+			$activeBadges[]=$item['whmcs_user_id'];
+		}
+		
+		// only members with badge show in dropdown
+		$criteria = new CDbCriteria;		
+		// only users with an active badge
+		if ($activeBadges) {
+			$activeBadges = implode(",", $activeBadges);
+			$criteria->addCondition('id in (' . $activeBadges . ')');
+		}
+		$criteria->order = 'firstname ASC';
+		
+		$activeUsersList = WHMCSclients::model()->findAll($criteria);
+		return CHtml::listData($activeUsersList, 'id', 'fullNameAndEmail');
+	}
+	
+	public function noBadgeUserList()
+	{	
+		
+		// TODO: simplify this monstrosity of a query
+		// get list of user ids with active badges
+		// badges returned from this query will not be included in the dropdown
+		$active_badges_query = '
+		SELECT
+	      whmcs_user_id
+		FROM (
+		  SELECT
+			distinct `dms-whmcs`.tblclients.id as whmcs_user_id,
+			IF(((IFNULL(active_badge_count,0) >= (IFNULL(s.addon_count,0) + IFNULL(m.product_count,0))) AND ((IFNULL(s.addon_count,0) + IFNULL(m.product_count,0)) >= 0)), "Hit Limit", "Under Limit") as limit_status,
+			(IFNULL(s.addon_count,0) + IFNULL(m.product_count,0)) as active_products
+		  FROM `dms-whmcs`.tblclients
+		  left join ( select
+			  whmcs_user_id,
+			  count(*) as active_badge_count
+			from `dms_crm`.`tbl_badges`
+			where status = "Active"
+			group by whmcs_user_id
+		  ) badges ON `dms-whmcs`.tblclients.id = badges.whmcs_user_id
+		  left join (
+			select 
+			  id,
+			  userid, 
+			  count(*) as product_count
+			from `dms-whmcs`.tblhosting
+			where tblhosting.domainstatus = "Active"
+			group by userid
+		  ) m ON m.userid = `dms-whmcs`.tblclients.id
+		  left join (
+			select
+			  hostingid, 
+			  count(*) as addon_count
+			from `dms-whmcs`.tblhostingaddons 
+			where tblhostingaddons.status = "Active" 
+			group by hostingid
+		  ) s ON s.hostingid = m.id
+		) as limit_query
+		where (limit_status = "Hit Limit")';
+		
+		$list= Yii::app()->db->createCommand($active_badges_query)->queryAll();
+		$activeBadges=array();
+		foreach($list as $item){
+			//process each item here
+			$activeBadges[]=$item['whmcs_user_id'];
+		}
+		// only (members with products) and (active badges below their limit) show in dropdown
+		$criteria = new CDbCriteria;
+		
+		// no users with active badges are in the email dropdown
+		if ($activeBadges) {
+			$activeBadges = implode(",", $activeBadges);
+			$criteria->addCondition('id not in (' . $activeBadges . ')');			
+		}
+		$criteria->order = 'firstname ASC';
+		
+		$activeUsersList = WHMCSclients::model()->findAll($criteria);
+		return CHtml::listData($activeUsersList, 'id', 'fullNameAndEmail');
+	}
+	
 }
