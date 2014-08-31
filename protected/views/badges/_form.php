@@ -20,7 +20,7 @@
 		echo '<span class="required" style="display: inline-block;">*</span>';
 		echo '<br><small>Note: Only showing paid members without an active badge.</small><br>';
 		// noBadgeUserList function will grab the list of whmcs_user_ids + emails 
-		echo $form->dropDownList($model, 'whmcs_user_id', $this->noBadgeUserList(), array('empty'=>'Select Name')); 
+		echo $form->dropDownList($model, 'whmcs_user_id', $this->noBadgeUserList(), array('empty'=>'Select Name', 'encode' => false)); 
 		?>
 	</div>
 	

@@ -19,7 +19,7 @@
         array(
             'class'=>'bootstrap.widgets.TbMenu',
             'items'=>array(
-				array('label'=>'Billing Account', 'url'=>$this->whmcsUrl(), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Billing Account', 'url'=>$this->whmcsUrl("clientarea.php"), 'visible'=>!Yii::app()->user->isGuest),
                 array('label'=>'Request Badge', 'url'=>array('/badges/create'), 'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Manage Badges', 'url'=>array('/badges/admin'), 'visible'=>Yii::app()->user->getId() == "admin"),
 				array('label'=>'Training', 

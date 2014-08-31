@@ -84,21 +84,18 @@ class Controller extends CController
 
 	// function to automatically authenticate users for WHMCSclient, so only LDAP login is required to get to WHMCS
 	// http://docs.whmcs.com/AutoAuth
-    public function whmcsUrl()
+    public function whmcsUrl($goto)
     {
-		$whmcsurl = "http://www.dallasmakerspace.org/accounts/dologin.php";
-
+		$whmcsurl = "https://dallasmakerspace.org/accounts/dologin.php";
 		$autoauthkey = Yii::app()->params['autoAuthKey']; 
 
 		$timestamp = time(); # Get current timestamp
 		$email = Yii::app()->user->getState('email'); # Clients Email Address to Login
-		$goto = "clientarea.php";
 
 		$hash = sha1($email.$timestamp.$autoauthkey); # Generate Hash
 
 		# Generate AutoAuth URL & Redirect
-		$url = $whmcsurl."?email=$email&timestamp=$timestamp&hash=$hash&goto=".urlencode($goto);
-
+		$url = $whmcsurl."?email=$email&timestamp=$timestamp&hash=$hash&goto=".$goto;
 		return $url;
     }
 	
@@ -178,6 +175,20 @@ class Controller extends CController
 		return CHtml::listData($activeUsersList, 'id', 'fullNameAndEmail');
 	}
 	
+	public function findFirstProduct($uid)
+	{
+		$active_product_query = '
+			select 
+			  id
+			from `dms-whmcs`.tblhosting
+			where tblhosting.domainstatus = "Active" and tblhosting.userid = :id
+			
+		';
+		$command = Yii::app()->db->createCommand($active_product_query);
+		$command->bindParam(':id',$uid,PDO::PARAM_STR);
+		return $command->queryScalar();
+	}
+	
 	public function noBadgeUserList()
 	{	
 		
@@ -206,7 +217,7 @@ class Controller extends CController
 			  userid, 
 			  count(*) as product_count
 			from `dms-whmcs`.tblhosting
-			where tblhosting.domainstatus = "Active"
+			where (tblhosting.domainstatus = "Active") OR (tblhosting.nextduedate > CURDATE())
 			group by userid
 		  ) m ON m.userid = `dms-whmcs`.tblclients.id
 		  left join (
@@ -214,7 +225,7 @@ class Controller extends CController
 			  hostingid, 
 			  count(*) as addon_count
 			from `dms-whmcs`.tblhostingaddons 
-			where tblhostingaddons.status = "Active" 
+			where (tblhostingaddons.status = "Active") OR (tblhostingaddons.nextduedate > CURDATE())
 			group by hostingid
 		  ) s ON s.hostingid = m.id
 		) as limit_query

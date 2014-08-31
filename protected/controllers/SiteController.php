@@ -38,11 +38,25 @@ class SiteController extends Controller
 	public function actionBilling()
 	{
 		if (!Yii::app()->user->isGuest) {
-			$this->redirect($this->whmcsUrl());
+			$this->redirect($this->whmcsUrl("clientarea.php"));
 		} else {
 			Yii::app()->user->loginRequired();
 		}
 	}
+	
+	// send the user to WHMCS cancellation
+	/*
+	public function actionCancel()
+	{
+		$uid = $this->getWhmcsUserID(Yii::app()->user->getState('email'));
+		$first_product = $this->findFirstProduct($uid);
+		if (!Yii::app()->user->isGuest) {
+			$this->redirect($this->whmcsUrl("clientarea.php?action=cancel&id=" . $first_product));
+		} else {
+			Yii::app()->user->loginRequired();
+		}
+	}
+	*/
 	/**
 	 * This is the action to handle external exceptions.
 	 */

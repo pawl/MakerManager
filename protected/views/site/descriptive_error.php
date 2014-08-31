@@ -11,6 +11,5 @@ $this->breadcrumbs=array(
 <h2>Error <?php echo $code; ?></h2>
 
 <div class="error">
-Internal Server Error
-<?php //echo CHtml::encode($message); ?>
+<?php echo CHtml::encode($message); ?>
 </div>

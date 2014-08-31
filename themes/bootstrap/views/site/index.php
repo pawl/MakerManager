@@ -19,11 +19,11 @@ $this->pageTitle=Yii::app()->name;
 	<p>
 	<?php 
 		//if (Yii::app()->user->getId() == "admin") { ?>
-		<a class="btn btn-large btn-primary" href="<?php //echo $this->whmcsUrl(); ?>">Billing Account</a> 
+		<a class="btn btn-large btn-primary" href="<?php //echo $this->whmcsUrl("clientarea.php"); ?>">Billing Account</a> 
 		<a class="btn btn-large" href="<?php //echo Yii::app()->createUrl('/badges/create'); ?>">Request Badge</a>
 		<a class="btn btn-large" href="<?php //echo Yii::app()->createUrl('/badges/admin'); ?>">Manage Badges</a>		
 	<?php //} elseif (!Yii::app()->user->isGuest) { ?>
-		<a class="btn btn-large btn-primary" href="<?php //echo $this->whmcsUrl(); ?>">Billing Account</a> 
+		<a class="btn btn-large btn-primary" href="<?php //echo $this->whmcsUrl("clientarea.php"); ?>">Billing Account</a> 
 		<a class="btn btn-large" href="<?php //echo Yii::app()->createUrl('/badges/create'); ?>">Request Badge</a>
 	<?php //} else { ?>
 		<a class="btn btn-large btn-primary" href="<?php //echo Yii::app()->createUrl('/site/login'); ?>">Login</a> 
