@@ -3,6 +3,9 @@ Maker-Manager
 
 Maker Manager was developed to solve administrative challenges for Dallas Makerspace.
 
+![Alt text](https://github.com/pawl/MakerManager/blob/master/screenshots/makermanager.png "Badge Request Page")
+
+
 It features the following:
 * A self-documenting place to activate and deactivate badges.
 * A web interface for Dallas Makerspace's access control system.
