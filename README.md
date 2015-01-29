@@ -1,3 +1,6 @@
+This project was replaced by MakerManager2: https://github.com/pawl/MakerManager2
+=============
+
 Maker-Manager
 =============
 
